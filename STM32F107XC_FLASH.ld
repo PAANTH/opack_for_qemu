@@ -124,6 +124,11 @@ SECTIONS
     _edata = .;        /* define a global symbol at data end */
   } >RAM AT> FLASH
 
+  .pashahod_version_section 0x080020000: /*must be half of flash addr*/
+  {
+    KEEP(*(.pashahod_version_section))
+  } >FLASH
+
   /* Uninitialized data section */
   . = ALIGN(4);
   .bss :

@@ -1,5 +1,6 @@
 
-#include "inttypes.h"
+#include <stdint.h>
+#include <string.h>
 #include "stm32f1xx_hal.h"
 
 
@@ -114,10 +115,10 @@ void config_hw(void)
   *         of 0x200.
   * @retval None
   */
-static void NVIC_SetVectorTable(uint32_t NVIC_VectTab, uint32_t Offset)
-{
-  SCB->VTOR = NVIC_VectTab | (Offset & (uint32_t)0x1FFFFF80);
-}
+// static void NVIC_SetVectorTable(uint32_t NVIC_VectTab, uint32_t Offset)
+// {
+//   SCB->VTOR = NVIC_VectTab | (Offset & (uint32_t)0x1FFFFF80);
+// }
 /**
   \brief jump to main program
   \param[in] addr - main program address
@@ -142,9 +143,11 @@ static void NVIC_SetVectorTable(uint32_t NVIC_VectTab, uint32_t Offset)
 
 void jump_to_sram(void)
 {
-  memcpy(0x20000000, 0x80020000, updater_size);
+  memcpy((uint8_t *)0x20000000, (uint8_t *)0x80020000, 0x1da0);
   SCB->VTOR = 0x20000000;
-  NVIC_SystemReset();
+  void *reset_handler_addr = (void*)(*(uint32_t*)0x20000004);
+  void (*reset_handler)() = (void(*)())reset_handler_addr;
+  reset_handler();
 }
 
 uint8_t test_buf[1024];;
@@ -160,7 +163,7 @@ int main (void)
   while(1) {
     button_pressed = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
     if (button_pressed == GPIO_PIN_RESET) {
-      __jump(0x08020000U);
+      jump_to_sram();
     }
 
   }

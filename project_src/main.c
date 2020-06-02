@@ -2,6 +2,8 @@
 #include "inttypes.h"
 #include "stm32f1xx_hal.h"
 
+
+
 /*!
   \brief config_sysclk
         Функция настраивает системное тактирование на 168MHz.
@@ -92,7 +94,7 @@ void config_hw(void)
 
 }
 uint8_t test_buf[1024];;
-int main (void)
+int  main (void)
 {
   //uint32_t lat;
   //uint32_t retval = 0;
@@ -154,4 +156,12 @@ void Error_RAM_Test()
 Endless:
   goto Endless;
   __NOP();
+}
+
+
+ void Reset_Handler()
+{
+  //__CCMDATARAMEN_CLK_ENABLE();
+  SystemInit();
+  main();
 }

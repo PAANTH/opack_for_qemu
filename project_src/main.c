@@ -155,7 +155,9 @@ uint8_t test_buf[1024];;
 int main (void)
 {
   GPIO_PinState button_pressed = GPIO_PIN_SET;
-  SysTick_Config(72000);
+
+  HAL_Init();
+
   config_sysclk();
   config_hw();
 

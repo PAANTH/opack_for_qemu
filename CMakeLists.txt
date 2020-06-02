@@ -68,7 +68,7 @@ project(${PRJ_NAME} ASM C)
 #Common compiler flags
 set(COMMON_FLAGS "-mcpu=${ARCH} -mthumb -mthumb-interwork -mlittle-endian -mfloat-abi=${FLOAT_ABI} -mfpu=${FPU}  -Wall  -g -O0 -ffunction-sections -lm -lgcc -lc ")
 set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} -std=c++11")
-set(CMAKE_C_FLAGS "${COMMON_FLAGS} -std=c11 -g3 -Werror")
+set(CMAKE_C_FLAGS "${COMMON_FLAGS} -std=c11 -g3")# -Werror")
 set(CMAKE_AS_FLAGS "${COMMON_FLAGS}")
 
 set(CMAKE_EXE_LINKER_FLAGS "-mcpu=${ARCH} -nostartfiles -O0 -Wl,--gc-sections -specs=nosys.specs -lnosys -mfpu=${FPU} -mthumb -Wall -lm -lgcc -lc -T ${LINKER_SCRIPT}")

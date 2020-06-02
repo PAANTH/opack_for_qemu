@@ -115,40 +115,40 @@ void config_hw(void)
   *         of 0x200.
   * @retval None
   */
-// static void NVIC_SetVectorTable(uint32_t NVIC_VectTab, uint32_t Offset)
-// {
-//   SCB->VTOR = NVIC_VectTab | (Offset & (uint32_t)0x1FFFFF80);
-// }
+static void NVIC_SetVectorTable(uint32_t NVIC_VectTab, uint32_t Offset)
+{
+  SCB->VTOR = NVIC_VectTab | (Offset & (uint32_t)0x1FFFFF80);
+}
 /**
   \brief jump to main program
   \param[in] addr - main program address
   \return none
 */
-// void __jump(uint32_t addr){
+void __jump(uint32_t addr){
 
-//   uint32_t jump_address = *(__IO uint32_t*)(addr+4);
-//   pFun jump_to_app;
+  uint32_t jump_address = *(__IO uint32_t*)(addr+4);
+  pFun jump_to_app;
 
-//   uint32_t NVIC_VectTab_FLASH = 0x08000000U;
-//   //uint32_t NVIC_VectTab_SRAM = 0x02000000U;
-//   uint32_t app_offset = 0x20000U; //half flash mem
-//   jump_to_app = (pFun)jump_address;
-//   __set_PRIMASK(1);
-//   NVIC_SetVectorTable(NVIC_VectTab_FLASH, app_offset);
-//   __set_PRIMASK(0);
-//   __set_MSP(*(__IO uint32_t*)addr);
-//   jump_to_app();
+  uint32_t NVIC_VectTab_FLASH = 0x08000000U;
+  //uint32_t NVIC_VectTab_SRAM = 0x02000000U;
+  uint32_t app_offset = 0x20000U; //half flash mem
+  jump_to_app = (pFun)jump_address;
+  __set_PRIMASK(1);
+  NVIC_SetVectorTable(NVIC_VectTab_FLASH, app_offset);
+  __set_PRIMASK(0);
+  __set_MSP(*(__IO uint32_t*)addr);
+  jump_to_app();
 
-// }
-
-void jump_to_sram(void)
-{
-  memcpy((uint8_t *)0x20000000, (uint8_t *)0x80020000, 0x1da0);
-  SCB->VTOR = 0x20000000;
-  void *reset_handler_addr = (void*)(*(uint32_t*)0x20000004);
-  void (*reset_handler)() = (void(*)())reset_handler_addr;
-  reset_handler();
 }
+
+// void jump_to_sram(void)
+// {
+//   memcpy((uint8_t *)0x20000000, (uint8_t *)0x80020000, 0x1da0);
+//   SCB->VTOR = 0x20000000;
+//   void *reset_handler_addr = (void*)(*(uint32_t*)0x20000004);
+//   void (*reset_handler)() = (void(*)())reset_handler_addr;
+//   reset_handler();
+// }
 
 uint8_t test_buf[1024];;
 
@@ -165,7 +165,8 @@ int main (void)
   while(1) {
     button_pressed = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
     if (button_pressed == GPIO_PIN_RESET) {
-      jump_to_sram();
+      //jump_to_sram();
+      __jump(0x8020000);
     }
 
   }

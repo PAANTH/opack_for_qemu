@@ -159,9 +159,3 @@ Endless:
 }
 
 
- void Reset_Handler()
-{
-  //__CCMDATARAMEN_CLK_ENABLE();
-  SystemInit();
-  main();
-}

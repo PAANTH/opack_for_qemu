@@ -54,8 +54,8 @@ void config_hw(void)
   //__HAL_RCC_USART1_CLK_ENABLE();
   __HAL_RCC_TIM4_CLK_ENABLE();
 
-//LED0
-  gpio_init_struct.Pin       = GPIO_PIN_0;
+//LEDS
+  gpio_init_struct.Pin       = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_14 | GPIO_PIN_15;
   gpio_init_struct.Mode      = GPIO_MODE_OUTPUT_PP ;
   gpio_init_struct.Speed     = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOB, &gpio_init_struct);
@@ -118,7 +118,7 @@ int main (void)
 void TIM4_IRQHandler(void)
 {
   HAL_TIM_IRQHandler(&htim4);
-  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_14 | GPIO_PIN_15);
   HAL_TIM_Base_Start(&htim4);
 }
 

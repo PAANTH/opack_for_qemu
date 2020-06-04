@@ -76,12 +76,13 @@ void config_hw(void)
 
 }
 
-extern uint8_t _pashahod_sec_start, _pashahod_sec_end, _pashsahod_abs_addr;
+extern uint8_t _pashahod_sec_start, _pashahod_sec_end, _pashsahod_abs_addr, _sidata;
 void jump_to_sram(void)
 {
 
 uint32_t size_of_sec = (uint32_t)&_pashahod_sec_end - (uint32_t)&_pashahod_sec_start;
 uint32_t start_addr = (uint32_t)&_pashsahod_abs_addr;
+//uint32_t data_addr = (uint32_t)&_sidata;
 
   __HAL_RCC_SYSCFG_CLK_ENABLE();
   __disable_irq();

@@ -1,8 +1,9 @@
-
 #include <stdint.h>
 #include <string.h>
+
 #include "stm32f1xx_hal.h"
 
+#include "firm_updater.h"
 
 /*!
   \brief config_sysclk
@@ -52,7 +53,7 @@ void config_hw(void)
   __HAL_RCC_TIM4_CLK_ENABLE();
 
 //LED0
-  gpio_init_struct.Pin       = GPIO_PIN_0 | GPIO_PIN_15;
+  gpio_init_struct.Pin       = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_14 | GPIO_PIN_15;
   gpio_init_struct.Mode      = GPIO_MODE_OUTPUT_PP ;
   gpio_init_struct.Speed     = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOB, &gpio_init_struct);
@@ -75,22 +76,28 @@ void config_hw(void)
 
 }
 
-
+extern uint8_t _pashahod_sec_start, _pashahod_sec_end, _pashsahod_abs_addr;
 void jump_to_sram(void)
 {
+
+uint32_t size_of_sec = (uint32_t)&_pashahod_sec_end - (uint32_t)&_pashahod_sec_start;
+uint32_t start_addr = (uint32_t)&_pashsahod_abs_addr;
+
   __HAL_RCC_SYSCFG_CLK_ENABLE();
   __disable_irq();
-  memcpy((uint8_t *)0x20000000, (uint8_t *)0x08020000, 7180);
-  void *reset_handler_addr = (void*)(*(uint32_t*)0x20000004);
-  void (*reset_handler)() = (void(*)())reset_handler_addr;
-  reset_handler();
+  memcpy((uint8_t *)&_pashahod_sec_start, (uint8_t *)start_addr, size_of_sec);
+  //void *reset_handler_addr = (void*)(*(uint32_t*)0x20000004);
+  //void (*reset_handler)() = (void(*)())reset_handler_addr;
+  //reset_handler();
+  fu_main();
 }
 
 
 int main (void)
 {
   GPIO_PinState button_pressed = GPIO_PIN_SET;
-
+  uint32_t delay = 500;
+  uint32_t start;
   HAL_Init();
 
   config_sysclk();
@@ -100,7 +107,8 @@ int main (void)
   while(1) {
     button_pressed = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
     if (button_pressed == GPIO_PIN_RESET) {
-      HAL_TIM_Base_Stop(&htim4);
+      start = HAL_GetTick();
+      while((HAL_GetTick() - start) < delay) {}
       jump_to_sram();
     }
 

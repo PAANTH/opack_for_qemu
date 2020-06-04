@@ -55,6 +55,7 @@ SECTIONS
     . = ALIGN(4);
   } >FLASH
 
+
   /* The program code and other data goes into FLASH */
   .text :
   {
@@ -67,7 +68,6 @@ SECTIONS
 
     KEEP (*(.init))
     KEEP (*(.fini))
-
     . = ALIGN(4);
     _etext = .;        /* define a global symbols at end of code */
   } >FLASH
@@ -80,6 +80,7 @@ SECTIONS
     *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
     . = ALIGN(4);
   } >FLASH
+
 
   .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >FLASH
   .ARM : {
@@ -123,6 +124,8 @@ SECTIONS
     . = ALIGN(4);
     _edata = .;        /* define a global symbol at data end */
   } >RAM AT> FLASH
+
+
 
   /* Uninitialized data section */
   . = ALIGN(4);

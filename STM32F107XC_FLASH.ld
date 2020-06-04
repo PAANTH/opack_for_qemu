@@ -127,8 +127,8 @@ SECTIONS
 
     .pashahod_section
     {
-      . = . + SIZEOF(.isr_vector);
       _pashahod_sec_start = .;
+      . = . + SIZEOF(.isr_vector);
       . = ALIGN(4);
       KEEP(*firm_updater.c.obj(.text* .data* .bss* .rodata*))
       . = ALIGN(4);

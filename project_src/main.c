@@ -105,6 +105,7 @@ int main (void)
     if (button_pressed == GPIO_PIN_RESET) {
       start = HAL_GetTick();
       while((HAL_GetTick() - start) < delay) {}
+      HAL_TIM_Base_Stop(&htim4);
       jump_to_sram();
     }
 
@@ -114,7 +115,7 @@ int main (void)
 void TIM4_IRQHandler(void)
 {
   HAL_TIM_IRQHandler(&htim4);
-  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0 | GPIO_PIN_15);
+  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
   HAL_TIM_Base_Start(&htim4);
 }
 

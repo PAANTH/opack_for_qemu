@@ -76,6 +76,7 @@ void config_hw(void)
 
 }
 
+
 extern uint8_t _pashahod_sec_start, _pashahod_sec_end, _pashsahod_abs_addr, _sidata;
 void jump_to_sram(void)
 {
@@ -89,6 +90,7 @@ void jump_to_sram(void)
 }
 
 
+update_info_t uinfo;
 int main (void)
 {
   GPIO_PinState button_pressed = GPIO_PIN_SET;
@@ -98,6 +100,8 @@ int main (void)
 
   config_sysclk();
   config_hw();
+  uinfo.start_addr = 0x08020000U;
+  uinfo.bytelen = 7168U;
 
   HAL_TIM_Base_Start(&htim4);
   while(1) {

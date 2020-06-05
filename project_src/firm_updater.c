@@ -325,7 +325,8 @@ static uint8_t replace_core(void)
     addr_cpy_to += 2;
   }
 
-  while(1){}
+  CLEAR_BIT(FLASH->CR, FLASH_CR_PG);
+
   //erase storage
   ret = fu_erase(start_addr, STM32F107_LAST_PAGE_ADDR);
   if(ret){
